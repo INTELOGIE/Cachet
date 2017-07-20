@@ -74,6 +74,9 @@ class UpdateMetricCommandHandler
             'places'        => $command->places,
             'default_view'  => $command->default_view,
             'threshold'     => $command->threshold,
+        	'component_id'  => $command->component_id,
+        	'color'     	=> $command->color,
+        	'suggestedMax'  => $command->suggestedMax,
             'order'         => $command->order,
             'visible'       => $command->visible,
         ];

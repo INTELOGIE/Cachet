@@ -78,7 +78,7 @@ class Metric extends Model implements HasPresenter
         'calc_type'     => 0,
         'places'        => 2,
         'default_view'  => 1,
-        'threshold'     => 5,
+        'threshold'     => 5,    		
         'order'         => 0,
         'visible'       => 1,
     ];
@@ -96,6 +96,9 @@ class Metric extends Model implements HasPresenter
         'places'        => 'int',
         'default_view'  => 'int',
         'threshold'     => 'int',
+    	'component_id'  => 'int',
+    	'color'  => 'string',
+    	'suggestedMax'  => 'decimal',
         'order'         => 'int',
         'visible'       => 'int',
     ];
@@ -115,6 +118,9 @@ class Metric extends Model implements HasPresenter
         'places',
         'default_view',
         'threshold',
+    	'component_id',
+    	'color',
+    	'suggestedMax',
         'order',
         'visible',
     ];
@@ -132,6 +138,9 @@ class Metric extends Model implements HasPresenter
         'places'        => 'required|numeric|between:0,4',
         'default_view'  => 'required|numeric|between:0,3',
         'threshold'     => 'required|numeric|between:0,10',
+    	'component_id'  => 'required|numeric',
+    	'color'  		=> 'required|string',
+    	'suggestedMax'  => 'required|numeric',
         'visible'       => 'required|numeric|between:0,2',
     ];
 
@@ -165,6 +174,11 @@ class Metric extends Model implements HasPresenter
         });
     }
 
+    public function component()
+    {
+    	return $this->belongsTo(Component::class, 'component_id', 'id');
+    }
+    
     /**
      * Get all of the meta relation.
      *

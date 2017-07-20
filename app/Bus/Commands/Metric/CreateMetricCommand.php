@@ -81,6 +81,25 @@ final class CreateMetricCommand
      * @var int
      */
     public $threshold;
+    
+    /**
+     * Related component id
+     * 
+     * @var int
+     */
+    public $component_id;
+    
+    /**
+     * Graph color
+     * @var unknown
+     */
+    public $color;
+    
+    /**
+     * Graph suggested maximum
+     * @var unknown
+     */
+    public $suggestedMax;
 
     /**
      * The order of which to place the metric in.
@@ -112,6 +131,9 @@ final class CreateMetricCommand
         'places'        => 'nullable|int|between:0,4',
         'default_view'  => 'required|int|between:0,3',
         'threshold'     => 'required|int',
+    	'component_id'  => 'required|int',
+    	'color'  => 'required|string',
+    	'suggestedMax'  => 'required|numeric',
         'order'         => 'nullable|int',
         'visible'       => 'required|int|between:0,2',
     ];
@@ -133,7 +155,7 @@ final class CreateMetricCommand
      *
      * @return void
      */
-    public function __construct($name, $suffix, $description, $default_value, $calc_type, $display_chart, $places, $default_view, $threshold, $order = 0, $visible = 1)
+    public function __construct($name, $suffix, $description, $default_value, $calc_type, $display_chart, $places, $default_view, $threshold, $component_id, $color, $suggestedMax, $order = 0, $visible = 1)
     {
         $this->name = $name;
         $this->suffix = $suffix;
@@ -144,6 +166,9 @@ final class CreateMetricCommand
         $this->places = $places;
         $this->default_view = $default_view;
         $this->threshold = $threshold;
+        $this->component_id = $component_id;
+        $this->color = $color;
+        $this->suggestedMax = $suggestedMax;
         $this->order = $order;
         $this->visible = $visible;
     }

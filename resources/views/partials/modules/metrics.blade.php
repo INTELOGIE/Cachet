@@ -3,7 +3,7 @@
     @if($metrics->count() > 0)
     <ul class="list-group">
         @foreach($metrics as $metric)
-        <li class="list-group-item metric" data-metric-id="{{ $metric->id }}">
+        <li class="list-group-item metric" data-metric-id="{{ $metric->id }}" data-component-id="{{ $metric->component_id }}" style="display:none">
             <div class="row">
                 <div class="col-xs-10">
                     <strong>
@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <canvas id="metric-{{ $metric->id }}" data-metric-name="{{ $metric->name }}" data-metric-suffix="{{ $metric->suffix }}" data-metric-id="{{ $metric->id }}" data-metric-group="{{ $metric->view_name }}" data-metric-precision="{{ $metric->places }}" height="160" width="600"></canvas>
+                    <canvas id="metric-{{ $metric->id }}" data-suggestedmax="{{ $metric->suggestedMax }}" data-bgcolor="{{ $metric->color }}" data-bordercolor="{{ color_darken($metric->color, -0.1) }}" data-hovercolor="{{ color_darken($metric->color, -0.2) }}" data-metric-name="{{ $metric->name }}" data-metric-suffix="{{ $metric->suffix }}" data-metric-id="{{ $metric->id }}" data-metric-group="{{ $metric->view_name }}" data-metric-precision="{{ $metric->places }}" height="160" width="600"></canvas>
                 </div>
             </div>
         </li>
@@ -61,7 +61,18 @@
         function drawChart($el) {
             var metricId = $el.data('metric-id');
             var metricGroup = $el.data('metric-group');
+            var metricSuggestedMax = $el.data('suggestedmax');
+            var metricBGColor = $el.data('bgcolor');
+            var metricBorderColor = $el.data('bordercolor');
+            var metricHoverColor = $el.data('hovercolor');
 
+			if (metricSuggestedMax == '' || metricSuggestedMax == null || metricSuggestedMax == undefined) {
+				metricSuggestedMax = 0.1;
+			}
+			if (metricBGColor == '') {
+				metricBGColor = "{{ $theme_metrics }}";
+			}
+            
             if (typeof charts[metricId] === 'undefined') {
                 charts[metricId] = {
                     context: document.getElementById("metric-"+metricId).getContext("2d"),
@@ -78,18 +89,27 @@
                     chart.chart.destroy();
                 }
 
+/**
+ *   backgroundColor: "{{ $theme_metrics }}",
+ borderColor: "{{ color_darken($theme_metrics, -0.1) }}",
+ pointBackgroundColor: "{{ color_darken($theme_metrics, -0.1) }}",
+ pointBorderColor: "{{ color_darken($theme_metrics, -0.1) }}",
+ pointHoverBackgroundColor: "{{ color_darken($theme_metrics, -0.2) }}",
+ pointHoverBorderColor: "{{ color_darken($theme_metrics, -0.2) }}"
+ */
+                
                 chart.chart = new Chart(chart.context, {
                     type: 'line',
                     data: {
                         labels: _.keys(data),
                         datasets: [{
                             data: _.values(data),
-                            backgroundColor: "{{ $theme_metrics }}",
-                            borderColor: "{{ color_darken($theme_metrics, -0.1) }}",
-                            pointBackgroundColor: "{{ color_darken($theme_metrics, -0.1) }}",
-                            pointBorderColor: "{{ color_darken($theme_metrics, -0.1) }}",
-                            pointHoverBackgroundColor: "{{ color_darken($theme_metrics, -0.2) }}",
-                            pointHoverBorderColor: "{{ color_darken($theme_metrics, -0.2) }}"
+                            backgroundColor: metricBGColor,
+                            borderColor: metricBorderColor,
+                            pointBackgroundColor: metricBorderColor,
+                            pointBorderColor: metricBorderColor,
+                            pointHoverBackgroundColor: metricHoverColor,
+                            pointHoverBorderColor: metricHoverColor
                         }]
                     },
                     options: {
@@ -97,7 +117,7 @@
                             yAxes: [{
                                 ticks: {
                                     beginAtZero: true,
-                                    suggestedMax: 0.1,
+                                    suggestedMax: metricSuggestedMax,
                                     // fixedStepSize: result.data.metric.places,
                                     callback: function(tickValue, index, ticks) {
                                         var delta = ticks[1] - ticks[0];

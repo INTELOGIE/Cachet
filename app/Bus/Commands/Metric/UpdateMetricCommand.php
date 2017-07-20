@@ -86,6 +86,14 @@ final class UpdateMetricCommand
     public $threshold;
 
     /**
+     * Related component id
+     *
+     * @var int
+     */
+    public $component_id;
+    
+    
+    /**
      * The order of which to place the metric in.
      *
      * @var int|null
@@ -115,6 +123,9 @@ final class UpdateMetricCommand
         'places'        => 'nullable|numeric|between:0,4',
         'default_view'  => 'nullable|numeric|between:0,4',
         'threshold'     => 'nullable|int',
+    	'component_id'  => 'nullable|int',
+    	'color'     	=> 'nullable|string',
+    	'suggestedMax'  => 'nullable|numeric',
         'order'         => 'nullable|int',
         'visible'       => 'nullable|int|between:0,2',
     ];
@@ -137,7 +148,7 @@ final class UpdateMetricCommand
      *
      * @return void
      */
-    public function __construct(Metric $metric, $name, $suffix, $description, $default_value, $calc_type, $display_chart, $places, $default_view, $threshold, $order = null, $visible = null)
+    public function __construct(Metric $metric, $name, $suffix, $description, $default_value, $calc_type, $display_chart, $places, $default_view, $threshold,$component_id,$color,$suggestedMax, $order = null, $visible = null)
     {
         $this->metric = $metric;
         $this->name = $name;
@@ -149,6 +160,9 @@ final class UpdateMetricCommand
         $this->places = $places;
         $this->default_view = $default_view;
         $this->threshold = $threshold;
+        $this->component_id = $component_id;
+        $this->color = $color;
+        $this->suggestedMax = $suggestedMax;
         $this->order = $order;
         $this->visible = $visible;
     }

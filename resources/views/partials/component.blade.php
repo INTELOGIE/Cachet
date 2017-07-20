@@ -1,8 +1,8 @@
 <li class="list-group-item {{ $component->group_id ? "sub-component" : "component" }}">
     @if($component->link)
-    <a href="{{ $component->link }}" target="_blank" class="links">{{ $component->name }}</a>
+    <a href="javascript: jQuery('.list-group-item.metric').hide();jQuery('.list-group-item.metric[data-component-id={{ $component->id }}]').show();jQuery('html, body').animate({scrollTop: jQuery('.section-metrics').offset().top}, 2000);"><i class="ion ion-stats-bars"></i></a>&nbsp;<a href="{{ $component->link }}" target="_blank" class="links">{{ $component->name }}</a>
     @else
-    {{ $component->name }}
+    <a href="javascript: jQuery('.list-group-item.metric').hide();jQuery('.list-group-item.metric[data-component-id={{ $component->id }}]').show();jQuery('html, body').animate({scrollTop: jQuery('.section-metrics').offset().top}, 2000);"><i class="ion ion-stats-bars"></i></a>&nbsp;{{ $component->name }}
     @endif
 
     @if($component->description)

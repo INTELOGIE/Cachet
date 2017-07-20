@@ -63,6 +63,33 @@
                             @endforeach
                         </select>
                     </div>
+                     @if(!$components_in_groups->isEmpty() || !$components_out_groups->isEmpty())
+                    <div class="form-group">
+                        <label>{{ trans('forms.incidents.component') }}</label>
+                        <select name="metric[component_id]" class="form-control">
+                            <option value="" selected></option>
+                            @foreach($components_in_groups as $group)
+                            <optgroup label="{{ $group->name }}">
+                                @foreach($group->components as $component)
+                                <option value="{{ $component->id }}">{{ $component->name }}</option>
+                                @endforeach
+                            </optgroup>
+                            @endforeach
+                            @foreach($components_out_groups as $component)
+                            <option value="{{ $component->id }}">{{ $component->name }}</option>
+                            @endforeach
+                        </select>                        
+                    </div>
+                    @endif
+                     <div class="form-group">
+                        <label for="metric-color">{{ trans('forms.metrics.color') }}</label>
+                        <input type="text" class="form-control" name="metric[color]" id="metric-color" required value="" placeholder="{{ trans('forms.metrics.color') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="metric-suggestedMax">{{ trans('forms.metrics.suggestedmax') }}</label>
+                        <input type="text" class="form-control" name="metric[suggestedMax]" id="metric-suggestedMax" required value="" placeholder="{{ trans('forms.metrics.suggestedMax') }}">
+                    </div>
+                    
                     <div class="checkbox">
                         <label>
                             <input type="hidden" value="0" name="metric[display_chart]">

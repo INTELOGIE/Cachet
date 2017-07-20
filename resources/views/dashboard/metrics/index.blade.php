@@ -22,9 +22,14 @@
                 <div class="row striped-list-item">
                     <div class="col-md-6">
                         <i class="{{ $metric->icon }}"></i> <strong>{{ $metric->name }}</strong>
+                        <p><small>
                         @if($metric->description)
-                        <p><small>{{ Str::words($metric->description, 5) }}</small></p>
+                        {{ Str::words($metric->description, 5) }}
                         @endif
+                        @if($metric->component)
+                         | {{ $metric->component->name }}
+                        @endif
+                        </small></p>
                     </div>
                     <div class="col-md-6 text-right">
                         <a href="{{ cachet_route('dashboard.metrics.edit', [$metric->id]) }}" class="btn btn-default">{{ trans('forms.edit') }}</a>

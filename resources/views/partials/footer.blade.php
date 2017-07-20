@@ -5,14 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                @if($show_support)
-                <p>
-                    {!! trans('cachet.powered_by') !!}
-                    @if($show_timezone)
-                    {{ trans('cachet.timezone', ['timezone' => $timezone]) }}
-                    @endif
-                </p>
-                @endif
+               
             </div>
             <div class="col-sm-8">
                 <ul class="list-inline">

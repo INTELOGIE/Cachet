@@ -17,6 +17,8 @@ use CachetHQ\Cachet\Bus\Commands\Metric\RemoveMetricCommand;
 use CachetHQ\Cachet\Bus\Commands\Metric\UpdateMetricCommand;
 use CachetHQ\Cachet\Models\Metric;
 use CachetHQ\Cachet\Models\MetricPoint;
+use CachetHQ\Cachet\Models\Component;
+use CachetHQ\Cachet\Models\ComponentGroup;
 use GrahamCampbell\Binput\Facades\Binput;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\View;
@@ -33,7 +35,7 @@ class MetricController extends Controller
         $metrics = Metric::orderBy('order')->orderBy('id')->get();
 
         return View::make('dashboard.metrics.index')
-            ->withPageTitle(trans('dashboard.metrics.metrics').' - '.trans('dashboard.dashboard'))
+            ->withPageTitle(trans('dashboard.metrics.metrics').' - '.trans('dashboard.dashboard'))            
             ->withMetrics($metrics);
     }
 
@@ -46,6 +48,8 @@ class MetricController extends Controller
     {
         return View::make('dashboard.metrics.add')
             ->withPageTitle(trans('dashboard.metrics.add.title').' - '.trans('dashboard.dashboard'))
+            ->withComponentsInGroups(ComponentGroup::with('components')->get())
+            ->withComponentsOutGroups(Component::where('group_id', '=', 0)->get())
             ->withAcceptableThresholds(Metric::ACCEPTABLE_THRESHOLDS);
     }
 
@@ -81,6 +85,9 @@ class MetricController extends Controller
                 $metricData['places'],
                 $metricData['default_view'],
                 $metricData['threshold'],
+            	$metricData['component_id'],
+            	$metricData['color'],
+            	$metricData['suggestedMax'],
                 0, // Default order
                 $metricData['visible']
             ));
@@ -132,6 +139,8 @@ class MetricController extends Controller
     {
         return View::make('dashboard.metrics.edit')
             ->withPageTitle(trans('dashboard.metrics.edit.title').' - '.trans('dashboard.dashboard'))
+            ->withComponentsInGroups(ComponentGroup::with('components')->get())
+            ->withComponentsOutGroups(Component::where('group_id', '=', 0)->get())
             ->withMetric($metric)
             ->withAcceptableThresholds(Metric::ACCEPTABLE_THRESHOLDS);
     }
@@ -157,6 +166,9 @@ class MetricController extends Controller
                 Binput::get('places', null, false),
                 Binput::get('default_view', null, false),
                 Binput::get('threshold', null, false),
+            	Binput::get('component_id', null, false),
+            	Binput::get('color', null, false),
+            	Binput::get('suggestedMax', null, false),
                 null,
                 Binput::get('visible', null, false)
             ));
